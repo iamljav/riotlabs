@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>riot laboratories</title>
+    
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <meta name="description" content="a creative research collective exploring new ideas, behaviors, languages, and technologies.">
+    <meta property="og:title" content="riot laboratories">
+    <meta property="og:description" content="a creative research collective exploring new ideas, behaviors, languages, and technologies.">
+    <meta property="og:image" content="assets/background.png">
+    <meta name="twitter:card" content="summary_large_image">
+
     <style>
         @font-face {
             font-family: 'Nikkei';
@@ -25,7 +34,7 @@
         .wrapper {
             display: grid;
             grid-template-rows: repeat(8, 1fr); 
-            height: 100dvh; /* Dynamic height for mobile browsers */
+            height: 100dvh;
             width: 100%;
             align-items: center;
             justify-items: center;
@@ -44,7 +53,6 @@
             height: auto;
         }
 
-        /* Central Block */
         .content-block {
             grid-row: 3 / span 4;
             display: flex;
@@ -73,7 +81,7 @@
             letter-spacing: 0.2em;
             text-transform: uppercase;
             font-weight: bold;
-            margin-top: 10px; /* Locked to the figure feet */
+            margin-top: 10px;
         }
 
         footer {
@@ -139,18 +147,16 @@
             visibility: visible;
         }
 
-        /* Mobile Specific Adjustments */
         @media (max-width: 600px) {
             .content-block {
-                /* Scale reduced by 20% (1.2 * 0.8 = 0.96) */
                 transform: scale(0.96); 
-                grid-row: 2 / span 6; /* Uses more vertical space to keep icons visible */
+                grid-row: 2 / span 6;
             }
             .figure-container img {
-                max-height: 28vh; /* Proportionally smaller */
+                max-height: 28vh;
             }
             .baseline {
-                margin-top: 8px; /* Slightly tighter on small screens */
+                margin-top: 8px;
             }
         }
     </style>
