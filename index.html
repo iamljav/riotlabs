@@ -5,13 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>riot laboratories</title>
     <style>
+        /* Load Nikkei font from assets */
+        @font-face {
+            font-family: 'Nikkei';
+            src: url('assets/Nikkei.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             height: 100vh;
             background-color: #ffffff;
             color: #000;
-            font-family: "Courier New", Courier, monospace;
+            font-family: 'Nikkei', sans-serif; /* Applied Nikkei globally */
             overflow: hidden;
         }
 
@@ -26,11 +34,10 @@
             z-index: 1;
         }
 
-        /* Part 1: Logo (Trigger) */
         header {
             grid-row: 1;
-            cursor: help;
-            z-index: 100; /* Ensure logo stays above the overlay */
+            cursor: pointer;
+            z-index: 100;
         }
 
         .logo {
@@ -38,7 +45,6 @@
             height: auto;
         }
 
-        /* Parts 3-6: Central Block */
         .content-block {
             grid-row: 3 / span 4;
             display: flex;
@@ -53,6 +59,7 @@
             width: auto;
             max-width: 90vw;
             display: block;
+            margin: 0 auto;
         }
 
         .baseline {
@@ -61,9 +68,9 @@
             text-transform: uppercase;
             font-weight: bold;
             margin-top: 10px;
+            font-family: 'Nikkei', sans-serif;
         }
 
-        /* Part 8: Icons */
         footer {
             grid-row: 8;
         }
@@ -93,7 +100,6 @@
             stroke-linejoin: round;
         }
 
-        /* ABOUT OVERLAY */
         .about-overlay {
             position: fixed;
             top: 0;
@@ -111,6 +117,7 @@
             z-index: 50;
             padding: 40px;
             box-sizing: border-box;
+            pointer-events: none;
         }
 
         .about-text {
@@ -118,9 +125,9 @@
             line-height: 1.6;
             font-size: 0.9rem;
             letter-spacing: 0.05em;
+            font-family: 'Nikkei', sans-serif;
         }
 
-        /* Trigger logic: Hovering the header reveals the overlay */
         header:hover ~ .about-overlay {
             opacity: 1;
             visibility: visible;
