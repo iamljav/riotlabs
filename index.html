@@ -15,7 +15,6 @@
             overflow: hidden;
         }
 
-        /* 8-Part Grid Layout */
         .wrapper {
             display: grid;
             grid-template-rows: repeat(8, 1fr); 
@@ -23,11 +22,15 @@
             width: 100%;
             align-items: center;
             justify-items: center;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Part 1: Logo */
+        /* Part 1: Logo (Trigger) */
         header {
             grid-row: 1;
+            cursor: help;
+            z-index: 100; /* Ensure logo stays above the overlay */
         }
 
         .logo {
@@ -35,20 +38,18 @@
             height: auto;
         }
 
-        /* Parts 3-6: The Image + Baseline Block */
-        /* Increased size by 20% using scale */
+        /* Parts 3-6: Central Block */
         .content-block {
-            grid-row: 3 / span 4; /* Spanning from part 3 through 6 */
+            grid-row: 3 / span 4;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transform: scale(1.2); /* 20% bigger */
-            z-index: 1;
+            transform: scale(1.2);
         }
 
         .figure-container img {
-            max-height: 37.5vh; /* Constraints to roughly 3 grid parts height */
+            max-height: 37.5vh;
             width: auto;
             max-width: 90vw;
             display: block;
@@ -91,6 +92,39 @@
             stroke-linecap: round;
             stroke-linejoin: round;
         }
+
+        /* ABOUT OVERLAY */
+        .about-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+            z-index: 50;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .about-text {
+            max-width: 500px;
+            line-height: 1.6;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Trigger logic: Hovering the header reveals the overlay */
+        header:hover ~ .about-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +154,12 @@
                 <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
             </a>
         </footer>
+
+        <div class="about-overlay">
+            <div class="about-text">
+                a creative research collective focused on exploring new ideas, languages, and technologies.
+            </div>
+        </div>
     </div>
 
 </body>
