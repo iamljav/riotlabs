@@ -166,6 +166,7 @@
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
             pointer-events: auto;
+            z-index: 10;
         }
 
         .center-hub.is-open .logo { opacity: 0; }
@@ -250,21 +251,22 @@
     <script>
         const hub = document.querySelector('.center-hub');
         const ring = document.querySelector('.about-ring');
-        const isTouch = () => window.matchMedia('(hover: none)').matches;
 
-        // On touch devices, add class to body to suppress CSS hover
+        // Detect touch device
+        const isTouch = () => window.matchMedia('(hover: none)').matches;
         if (isTouch()) document.body.classList.add('touch');
 
-        // Touch: tap logo area -> open
-        hub.addEventListener('touchend', function(e) {
-            if (!hub.classList.contains('is-open')) {
-                e.preventDefault();
-                hub.classList.add('is-open');
-            }
+        // Use pointerup for universal tap/click handling
+        hub.addEventListener('pointerup', function(e) {
+            if (!isTouch()) return; // desktop handled by CSS hover
+            if (hub.classList.contains('is-open')) return; // already open, ignore
+            e.preventDefault();
+            e.stopPropagation();
+            hub.classList.add('is-open');
         });
 
-        // Touch: tap about text -> close
-        ring.addEventListener('touchend', function(e) {
+        ring.addEventListener('pointerup', function(e) {
+            if (!isTouch()) return;
             e.preventDefault();
             e.stopPropagation();
             hub.classList.remove('is-open');
