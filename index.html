@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>riot laboratories</title>
-    
-    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>ephemeral engine</title>
+
+    <link rel="icon" type="image/jpg" href="assets/favicon.jpg">
 
     <meta name="description" content="a creative research collective exploring new ideas, behaviors, languages, and technologies.">
-    <meta property="og:title" content="riot laboratories">
+    <meta property="og:title" content="ephemeral engine">
     <meta property="og:description" content="a creative research collective exploring new ideas, behaviors, languages, and technologies.">
-    <meta property="og:image" content="assets/background.png">
+    <meta property="og:image" content="assets/background.gif">
     <meta name="twitter:card" content="summary_large_image">
 
     <style>
@@ -33,57 +33,119 @@
             overflow: hidden;
         }
 
-        #matrix-canvas {
+        /* GIF background */
+        .bg-gif {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 0;
+            background-image: url('assets/background.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.22;
+            mix-blend-mode: screen;
         }
 
-        .wrapper {
-            display: grid;
-            grid-template-rows: repeat(8, 1fr);
-            height: 100dvh;
-            width: 100%;
-            align-items: center;
-            justify-items: center;
-            position: relative;
+        /* Vignette */
+        .bg-vignette {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 1;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.75) 100%);
+            pointer-events: none;
         }
 
-        header {
-            grid-row: 1;
-            cursor: pointer;
-            z-index: 100;
+        /* Full page centered layout */
+        .wrapper {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .logo {
-            max-width: 42px;
-            height: auto;
-            filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
-        }
-
-        .content-block {
-            grid-row: 3 / span 4;
+        /* Center hub — logo + baseline stacked */
+        .center-hub {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo {
+            width: 72px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.25));
+            transition: filter 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .center-hub:hover .logo {
+            filter: drop-shadow(0 0 14px rgba(255,255,255,0.15));
         }
 
         .baseline {
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
             text-transform: uppercase;
             font-weight: bold;
-            color: rgba(255,255,255,0.85);
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 10px;
+            transition: opacity 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
 
+        /* About text — expands outward from center on hover */
+        .about-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.82);
+            width: 420px;
+            max-width: 88vw;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 1;
+        }
+
+        .about-ring p {
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+            padding: 0 16px;
+        }
+
+        /* Trigger hover on the hub */
+        .center-hub:hover .about-ring {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .center-hub:hover .baseline {
+            opacity: 0;
+        }
+
+        /* Footer socials — fixed bottom center */
         footer {
-            grid-row: 8;
-            padding-bottom: 10px;
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
         }
 
         .socials {
@@ -92,7 +154,7 @@
         }
 
         .socials a {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.6);
             transition: color 0.2s ease, filter 0.2s ease;
             text-decoration: none;
         }
@@ -103,8 +165,8 @@
         }
 
         .socials svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             fill: none;
             stroke: currentColor;
             stroke-width: 1.2;
@@ -112,57 +174,34 @@
             stroke-linejoin: round;
         }
 
-        .about-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.94);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s;
-            z-index: 50;
-            padding: 40px;
-            pointer-events: none;
-        }
-
-        .about-text {
-            max-width: 600px;
-            line-height: 1.8;
-            font-size: 0.875rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: #ffffff;
-        }
-
-        header:hover ~ .about-overlay {
-            opacity: 1;
-            visibility: visible;
-        }
-
         @media (max-width: 600px) {
-            .content-block { grid-row: 2 / span 6; }
-            .about-text { font-size: 0.8125rem; }
+            .logo { width: 56px; }
+            .about-ring { width: 92vw; }
+            .about-ring p { font-size: 0.72rem; letter-spacing: 0.14em; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="matrix-canvas"></canvas>
+    <div class="bg-gif"></div>
+    <div class="bg-vignette"></div>
 
     <div class="wrapper">
-        <header>
-            <img src="assets/logo.png" alt="riot laboratories" class="logo">
-        </header>
 
-        <div class="content-block">
+        <div class="center-hub">
+            <!-- About text radiates outward from center -->
+            <div class="about-ring">
+                <p>a creative research collective exploring new ideas, behaviors, languages, and technologies.</p>
+            </div>
+
+            <img src="assets/logo.png" alt="ephemeral engine" class="logo">
             <div class="baseline">NON COMPLIANCE SINCE Y2K</div>
         </div>
 
-        <footer class="socials">
+    </div>
+
+    <footer>
+        <nav class="socials">
             <a href="https://www.instagram.com/riotlaboratories" target="_blank" aria-label="Instagram">
                 <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
             </a>
@@ -172,180 +211,8 @@
             <a href="https://riotlabs.metalabel.com" target="_blank" aria-label="Shop">
                 <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
             </a>
-        </footer>
-
-        <div class="about-overlay">
-            <div class="about-text">
-                a creative research collective exploring new ideas, behaviors, languages, and technologies.
-            </div>
-        </div>
-    </div>
-
-    <script>
-    (function () {
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-
-        const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" +
-                      "!@#$%^&*()_+-=[]{}|;':\",./<>?\\`~" +
-                      "ΑΒΓΔΛΩΨΞΦθλμπστφχψω" +
-                      "░▒▓│┤╣║╗╝┐└┴┬├─┼╠═╬┘┌";
-
-        const TARGET = "EPHEMERAL ENGINE";
-        const FS = 13; // font size / cell size
-
-        let cols, rows, cells, drops;
-
-        // Color palette: deep blue → cyan → green, matching reference image
-        const PALETTE = [
-            '#1558b0', '#1a6fd4', '#2b9fd4',
-            '#00c8ff', '#00e5ff', '#4fc3f7',
-            '#00ff41', '#00e5aa', '#00b894',
-            '#0d3a6e', '#0a2a4a', '#063d2a',
-        ];
-
-        function rc() { return CHARS[Math.floor(Math.random() * CHARS.length)]; }
-        function rp() { return PALETTE[Math.floor(Math.random() * PALETTE.length)]; }
-
-        function init() {
-            canvas.width  = window.innerWidth;
-            canvas.height = window.innerHeight;
-            cols = Math.floor(canvas.width  / FS);
-            rows = Math.floor(canvas.height / FS);
-
-            cells = [];
-            for (let r = 0; r < rows; r++) {
-                cells[r] = [];
-                for (let c = 0; c < cols; c++) {
-                    cells[r][c] = { ch: rc(), col: rp(), bright: Math.random() > 0.8 };
-                }
-            }
-
-            drops = Array.from({ length: cols }, () => Math.floor(Math.random() * -rows));
-            computeTarget();
-        }
-
-        // ── Target phrase ─────────────────────────────────────────────────────
-        let tCells = [];  // [{r,c,ch}]
-        function computeTarget() {
-            tCells = [];
-            const cr = Math.floor(rows / 2);
-            const cc = Math.floor((cols - TARGET.length) / 2);
-            for (let i = 0; i < TARGET.length; i++) {
-                if (cc + i >= 0 && cc + i < cols)
-                    tCells.push({ r: cr, c: cc + i, ch: TARGET[i] });
-            }
-        }
-
-        // Phase machine: 0=hidden 1=appear 2=hold 3=dissolve
-        let phase = 0, pf = 0;
-        const PH = { HIDDEN: 200, APPEAR: 50, HOLD: 260, DISSOLVE: 50 };
-        let reveal = {}; // "r,c" => 0..1
-
-        function stepPhase() {
-            pf++;
-            if (phase === 0 && pf > PH.HIDDEN)  { phase = 1; pf = 0; reveal = {}; computeTarget(); }
-            else if (phase === 1) {
-                tCells.forEach(({ r, c }, i) => {
-                    const k = `${r},${c}`;
-                    const t = i / tCells.length;
-                    const p = pf / PH.APPEAR;
-                    reveal[k] = p > t ? Math.min(1, (p - t) * tCells.length) : 0;
-                });
-                if (pf > PH.APPEAR) { phase = 2; pf = 0; tCells.forEach(({ r, c }) => reveal[`${r},${c}`] = 1); }
-            }
-            else if (phase === 2 && pf > PH.HOLD)  { phase = 3; pf = 0; }
-            else if (phase === 3) {
-                tCells.forEach(({ r, c }, i) => {
-                    const k = `${r},${c}`;
-                    const t = i / tCells.length;
-                    const p = pf / PH.DISSOLVE;
-                    reveal[k] = p > t ? Math.max(0, 1 - (p - t) * tCells.length) : 1;
-                });
-                if (pf > PH.DISSOLVE) { phase = 0; pf = 0; reveal = {}; }
-            }
-        }
-
-        // ── Main draw ─────────────────────────────────────────────────────────
-        function draw() {
-            // Trail fade
-            ctx.fillStyle = 'rgba(0,0,0,0.16)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.font = `${FS}px "Courier New", monospace`;
-
-            stepPhase();
-
-            // Rain: advance drops, paint bright head
-            for (let c = 0; c < cols; c++) {
-                const r = drops[c];
-                if (r >= 0 && r < rows) {
-                    cells[r][c].ch = rc();
-                    cells[r][c].col = '#ffffff';
-                    cells[r][c].bright = true;
-                }
-                drops[c]++;
-                if (drops[c] > rows + 15) drops[c] = Math.floor(Math.random() * -25);
-            }
-
-            // Scatter glitch
-            const gn = Math.floor(Math.random() * 20) + 6;
-            for (let g = 0; g < gn; g++) {
-                const gr = Math.floor(Math.random() * rows);
-                const gc = Math.floor(Math.random() * cols);
-                cells[gr][gc].ch = rc();
-                if (Math.random() < 0.25) cells[gr][gc].col = rp();
-            }
-
-            // Horizontal slice glitch
-            if (Math.random() < 0.035) {
-                const sr = Math.floor(Math.random() * rows);
-                const sh = (Math.random() < 0.5 ? 1 : -1) * (Math.floor(Math.random() * 5) + 1);
-                const row = cells[sr];
-                if (sh > 0) { for (let c = cols-1; c >= sh; c--) row[c] = { ...row[c-sh] }; }
-                else        { for (let c = 0; c < cols+sh; c++) row[c] = { ...row[c-sh] }; }
-            }
-
-            // Build target lookup for fast access
-            const tMap = {};
-            tCells.forEach(t => { tMap[`${t.r},${t.c}`] = t.ch; });
-
-            // Render all cells
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const cell = cells[r][c];
-                    const x = c * FS;
-                    const y = (r + 1) * FS;
-                    const key = `${r},${c}`;
-                    const rev = reveal[key];
-                    const inTarget = tMap[key] !== undefined && (phase === 1 || phase === 2 || phase === 3);
-
-                    ctx.shadowBlur = 0;
-
-                    if (inTarget && rev !== undefined && rev > 0) {
-                        const ch = rev > 0.6 ? (Math.random() < 0.08 ? rc() : tMap[key]) : rc();
-                        ctx.shadowColor = '#00d4ff';
-                        ctx.shadowBlur  = 14;
-                        ctx.globalAlpha = Math.min(1, rev * 1.1);
-                        ctx.fillStyle   = rev > 0.7 ? '#e8f8ff' : '#00ccff';
-                        ctx.fillText(ch, x, y);
-                        ctx.shadowBlur  = 0;
-                    } else {
-                        ctx.globalAlpha = cell.bright ? 0.9 : (0.18 + Math.random() * 0.28);
-                        ctx.fillStyle   = cell.col;
-                        ctx.fillText(cell.ch, x, y);
-                    }
-                }
-            }
-
-            ctx.globalAlpha = 1;
-        }
-
-        init();
-        window.addEventListener('resize', init);
-        setInterval(draw, 42); // ~24fps
-    })();
-    </script>
+        </nav>
+    </footer>
 
 </body>
 </html>
