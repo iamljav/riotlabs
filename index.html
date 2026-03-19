@@ -45,7 +45,7 @@
             background-repeat: no-repeat;
             opacity: 0.22;
             mix-blend-mode: screen;
-            filter: grayscale(100%);
+            filter: grayscale(60%) sepia(40%) hue-rotate(340deg) saturate(1.4);
         }
 
         /* Vignette */
@@ -58,10 +58,21 @@
             pointer-events: none;
         }
 
+        /* Subtle orange glow */
+        .bg-orange {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 2;
+            background: radial-gradient(ellipse at 60% 50%, rgba(255, 85, 0, 0.07) 0%, transparent 70%),
+                        radial-gradient(ellipse at 30% 70%, rgba(220, 60, 0, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
         /* Full page centered layout */
         .wrapper {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             width: 100%;
             height: 100dvh;
             display: flex;
@@ -80,7 +91,7 @@
         }
 
         .logo {
-            width: 72px;
+            width: 83px;
             height: auto;
             display: block;
             filter: drop-shadow(0 0 8px rgba(255,255,255,0.25));
@@ -94,7 +105,7 @@
         }
 
         .baseline {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             letter-spacing: 0.22em;
             text-transform: uppercase;
             font-weight: bold;
@@ -122,7 +133,7 @@
         }
 
         .about-ring p {
-            font-size: 0.78rem;
+            font-size: 0.90rem;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             line-height: 1.9;
@@ -157,7 +168,7 @@
             bottom: 18px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 10;
+            z-index: 11;
         }
 
         .socials {
@@ -187,9 +198,9 @@
         }
 
         @media (max-width: 600px) {
-            .logo { width: 56px; }
+            .logo { width: 64px; }
             .about-ring { width: 92vw; }
-            .about-ring p { font-size: 0.72rem; letter-spacing: 0.14em; }
+            .about-ring p { font-size: 0.83rem; letter-spacing: 0.14em; }
         }
     </style>
 </head>
@@ -197,6 +208,7 @@
 
     <div class="bg-gif"></div>
     <div class="bg-vignette"></div>
+    <div class="bg-orange"></div>
 
     <div class="wrapper">
 
@@ -214,11 +226,11 @@
 
     <footer>
         <nav class="socials">
-            <a href="https://www.instagram.com/riotlaboratories" target="_blank" aria-label="Instagram">
+            <a href="https://www.instagram.com/ephemeralengine" target="_blank" aria-label="Instagram">
                 <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
             </a>
-            <a href="mailto:info@ephemeralengine.com" aria-label="Email">
+            <a href="/cdn-cgi/l/email-protection#0960676f66496c79616c646c7b68656c676e60676c276a6664" aria-label="Email">
                 <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
             </a>
-            <a href="https://riotlabs.metalabel.com" target="_blank" aria-label="Shop">
-                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0
+            <a href="https://ephemeralengine.metalabel.com" target="_blank" aria-label="Shop">
+                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="
